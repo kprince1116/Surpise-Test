@@ -1,0 +1,85 @@
+﻿@using service.Interfaces
+@using service.Services
+@inject IUserRoleService UserRoleService
+@inject ITokenService TokenService
+@inject IHttpContextAccessor HttpContext
+
+@{
+    var isAdmin = await UserRoleService.IsUserInRoleAsync("Admin");
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Presentation</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Presentation.styles.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+
+</head>
+
+<body>
+     <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3" style="background-color: rgb(223, 243, 243) !important;" >
+            <div class="container-fluid">
+                <div class="d-flex">
+                    <a class="navbar-brand">Employee Managment System</a>
+
+                </div>
+
+                <div class="d-flex gap-3">
+                    @if (isAdmin)
+                    {
+                        <div class="p-2" style="background-color: aliceblue !important; border: none !important;">
+                            <button style="border: none !important;" id="AddBlog">Add New Blog</button>
+
+                        </div>
+                    }
+                    <Button style="background-color: aliceblue !important; border: none !important;" class="p-2"
+                        data-bs-target="#exampleModal" data-bs-toggle="modal">LogOut</Button>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.2/jquery.validate.unobtrusive.min.js" ></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Confirmation</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex justify-content-center align-items-center flex-column">
+                <img class="" src="images/icons/exclamation-triangle.svg" alt="">
+                <h1 class="fs-5">Are You Sure you want to Logout</h1>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <a asp-controller="Login" class="btn btn-primary" asp-action="Logout">Yes</a>
+                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>

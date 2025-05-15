@@ -1,0 +1,17 @@
+D:\Project\Surprise-Test\service\bin\Debug\net7.0\service.deps.json
+D:\Project\Surprise-Test\service\bin\Debug\net7.0\service.runtimeconfig.json
+D:\Project\Surprise-Test\service\bin\Debug\net7.0\service.dll
+D:\Project\Surprise-Test\service\bin\Debug\net7.0\service.pdb
+D:\Project\Surprise-Test\service\bin\Debug\net7.0\Repository.dll
+D:\Project\Surprise-Test\service\bin\Debug\net7.0\Repository.pdb
+D:\Project\Surprise-Test\service\obj\Debug\net7.0\service.csproj.AssemblyReference.cache
+D:\Project\Surprise-Test\service\obj\Debug\net7.0\service.GeneratedMSBuildEditorConfig.editorconfig
+D:\Project\Surprise-Test\service\obj\Debug\net7.0\service.AssemblyInfoInputs.cache
+D:\Project\Surprise-Test\service\obj\Debug\net7.0\service.AssemblyInfo.cs
+D:\Project\Surprise-Test\service\obj\Debug\net7.0\service.csproj.CoreCompileInputs.cache
+D:\Project\Surprise-Test\service\obj\Debug\net7.0\service.csproj.CopyComplete
+D:\Project\Surprise-Test\service\obj\Debug\net7.0\service.dll
+D:\Project\Surprise-Test\service\obj\Debug\net7.0\refint\service.dll
+D:\Project\Surprise-Test\service\obj\Debug\net7.0\service.pdb
+D:\Project\Surprise-Test\service\obj\Debug\net7.0\service.genruntimeconfig.cache
+D:\Project\Surprise-Test\service\obj\Debug\net7.0\ref\service.dll

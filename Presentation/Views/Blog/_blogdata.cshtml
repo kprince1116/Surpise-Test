@@ -1,0 +1,55 @@
+@using service.Interfaces
+@model Repository.viewmodel.BlogViewModel
+
+@inject IUserRoleService UserRoleService
+@inject ITokenService TokenService
+@inject IHttpContextAccessor HttpContext
+
+@{
+    var isAdmin = await UserRoleService.IsUserInRoleAsync("Admin");
+    var isUser = await UserRoleService.IsUserInRoleAsync("User");
+}
+
+<div class="row">
+@foreach(var blog in Model.Blogs)
+{
+
+<div class="blog-card col-2">
+    <div class="blog-header"  style=" margin-left: -12px !important; margin-bottom: -2px !important;margin-right: -12px !important; ">
+      <div class="d-flex justify-content-between" >
+      <h2 class="blog-title">@blog.BlogTitle</h2>
+      <div class="d-flex gap-1">   
+       @if(isAdmin)
+       { <img id="editblogicon" data-editblog="@blog.BlogId" style="height: 20px !important;"  src="~/images/icons/pen.svg" alt="">}
+              @if(isAdmin)
+
+        {<img id="deleteblogicon" data-deleteblog="@blog.BlogId" style="height: 20px !important;" src="~/images/icons/trash (1).svg" alt="">}
+      </div>
+      </div>
+      <div class="blog-meta">
+        Tag: <strong>@blog.BlogTags</strong> | Created on: <time>@blog.CreatedAt.ToString("dd-MM-yyyy")</time>
+      </div>
+    </div>
+ 
+    <div class="blog-content" style="max-height: 200px !important; overflow-y: auto;" >
+      <p>@blog.BlogContent</p>
+    </div>
+ 
+    <div class="blog-footer" style=" margin-right:-12px !important; margin-left: -12px !important; margin-bottom: -2px !important;" >
+      @if(isUser)
+      {
+       <div class="d-flex justify-content-end" >
+            <img id="AddComments" data-userid="@blog.UserId"  data-id="@blog.BlogId" style="height: 20px;" src="~/images/icons/plus-square.svg" alt="">
+       </div> 
+      }
+      @foreach(var comment in blog.Comments)
+      {
+        <ul class="comments">
+        <li>@comment.UserName :- @comment.CommentText</li>
+      </ul>
+      }      
+    </div>
+  </div>
+  }
+  </div>
+

@@ -1,0 +1,269 @@
+@model Repository.viewmodel.BlogViewModel
+
+<link rel="stylesheet" href="~/css/Blog.css">
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+<body style="margin: 0; padding: 0;">
+  <div class="d-flex flex-column">
+    <div class="d-flex justify-content-end position-relative align-items-center px-5">
+      <input type="text" class="search form-control search-bar" style="height: 60px;" id="BlogItemSearch"
+        placeholder="Search" />
+      <img src="~/images/icons/search.svg" alt="" style="width: 20px; aspect-ratio: 1"
+        class="bg-white position-absolute rounded-2 m-2" />
+    </div>
+  </div>
+  </div>
+
+
+  <div id="BlogData">
+
+  </div>
+
+</body>
+
+@*Add Blog*@
+<div class="modal fade" data-bs-backdrop="static" id="AddBlogData" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addBlogModalLabel">Add Blog</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form asp-controller="Blog" asp-action="AddBlog" method="post">
+          <div class="mb-3">
+            <label for="blogTitle" class="form-label">Title</label>
+            <input type="text" class="form-control" id="blogTitle" asp-for="@Model.AddBlog.BlogTitle" required>
+            <span asp-validation-for="@Model.AddBlog.BlogTitle" class="text-danger validation-message"></span>
+          </div>
+          <div class="mb-3">
+            <label for="blogTitle" class="form-label">Tag</label>
+            <input type="text" class="form-control" id="blogTitle" asp-for="@Model.AddBlog.BlogTags" required>
+            <span asp-validation-for="@Model.AddBlog.BlogTags" class="text-danger validation-message"></span>
+          </div>
+          <div class="mb-3">
+            <label for="blogContent" class="form-label">Content</label>
+            <textarea class="form-control" id="blogContent" asp-for="@Model.AddBlog.BlogContent" rows="4"
+              required></textarea>
+            <span asp-validation-for="@Model.AddBlog.BlogContent" class="text-danger validation-message"></span>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+@*Edit Blog*@
+
+
+<div id="FetchEditBlog">
+
+</div>
+
+
+@*Delete Blog*@
+<div class="modal fade" data-bs-backdrop="static" id="deleteBlog" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Confirmation</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body d-flex justify-content-center align-items-center flex-column">
+        <img class="" src="~/images/icons/exclamation-triangle.svg" alt="">
+        <h1 class="fs-5">Are You Sure you want to delete Blog ?</h1>
+      </div>
+      <form method="post" asp-controller="Blog" asp-action="DeleteBlog"
+        class="modal-footer d-flex justify-content-center">
+        <input type="hidden" name="id" id="BlogdeleteId" />
+        <button type="submit" class="btn btn-primary">Yes</button>
+        <button type="button" class="btn btn-outline-primary">No</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+@*Add Comment*@
+
+<div class="modal fade" data-bs-backdrop="static" id="AddCommentData" data-bs-backdrop="static"
+  data-bs-keyboard="false">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addBlogModalLabel">Add Comment On Blog</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form asp-controller="Blog" asp-action="AddComment" method="post">
+          <input type="hidden" asp-for="@Model.AddComment.BlogId" id="BlogIdForAddComment">
+          <input type="hidden" asp-for="@Model.AddComment.UserId" id="UserIdForAddComment">
+          <div class="mb-3">
+            <label for="blogContent" class="form-label">Content</label>
+            <textarea class="form-control" id="blogContent" asp-for="@Model.AddComment.CommentContent" rows="4"
+              required></textarea>
+              <span asp-validation-for="@Model.AddComment.CommentContent" class="text-danger validation-message"></span>
+          </div>
+           <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+@section Scripts {
+
+  <script>
+    $(document).ready(function () {
+      GetBlogData();
+    });
+  </script>
+
+  <script>
+    function GetBlogData() {
+      let search = $('#BlogItemSearch').val();
+      $.ajax({
+        url: "/Blog/GetBlogData",
+        type: 'GET',
+        data: { searchKey: search },
+        success: function (data) {
+          $('#BlogData').html(data);
+        },
+        error: function () {
+          console.log("Error");
+        }
+      });
+    }
+  </script>
+
+  <script>
+    $(document).on("input", "#BlogItemSearch", function () {
+      GetBlogData();
+    });
+  </script>
+
+
+  <script>
+    $(document).on("click", "#editblogicon", function () {
+      var id = $(this).data("editblog");
+      console.log("id", id);
+      $.ajax({
+        type: "GET",
+        data: { id: id },
+        url: "/Blog/EditBlog",
+        success: function (data) {
+          $('#FetchEditBlog').html(data);
+          var modal = new bootstrap.Modal(document.getElementById('EditBlogData'));
+          modal.show();
+        }
+      });
+    });
+  </script>
+  <script>
+    $(document).on("click", "#AddBlog", function () {
+      var modal = new bootstrap.Modal(document.getElementById('AddBlogData'));
+      modal.show();
+    })
+  </script>
+
+  <script>
+    $(document).on("click", "#deleteblogicon", function () {
+      var blogId = $(this).data('deleteblog');
+
+      $('#BlogdeleteId').val(blogId);
+      var modal = new bootstrap.Modal(document.getElementById('deleteBlog'));
+      modal.show();
+    })
+  </script>
+
+  <script>
+    $(document).off("click", "#AddComments").on("click", "#AddComments", function () {
+      var blogid = $(this).data('id');
+      var userid = $(this).data("userid");
+      console.log("blogid", blogid);
+      $('#BlogIdForAddComment').val(blogid);
+      $('#UserIdForAddComment').val(userid);
+      var modal = new bootstrap.Modal(document.getElementById('AddCommentData'));
+      modal.show();
+    })
+  </script>
+
+  <script>
+    $(document).on("submit", "#EditBlogPost", function (e) {
+      e.preventDefault();
+      $.ajax({
+        type: 'Post',
+        url: "/Blog/EditBlog",
+        data: $("#EditBlogPost").serialize(),
+        success: function (response) {
+          if (response.success == true) {
+            const modalElement = document.getElementById('EditBlogData');
+            const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+            modalInstance.hide();
+            GetBlogData();
+            toastr.success("Blog Edited Succesfully");
+          } else {
+            toastr.error("Something went wrong");
+          }
+        },
+        error: function () {
+          console.log("error")
+        }
+      });
+    });
+
+  </script> 
+
+   <partial name="_ValidationScriptsPartial" />
+}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+        $(document).ready(function () {
+
+        @if (TempData["LoginSuccess"] != null && (bool)TempData["LoginSuccess"])
+        {
+            <text>
+                toastr.success('User login successfully!');
+            </text>
+        }
+        @if (TempData["BlogAdded"] != null && (bool)TempData["BlogAdded"])
+        {
+            <text>
+                toastr.success('Blog Added successfully!');
+            </text>
+        }
+        @if (TempData["BlogEdited"] != null && (bool)TempData["BlogEdited"])
+        {
+            <text>
+                toastr.success('Blog Edited successfully!');
+            </text>
+        }
+        @if (TempData["BlogDeleted"] != null && (bool)TempData["BlogDeleted"])
+        {
+            <text>
+                toastr.success('Blog Deleted successfully!');
+            </text>
+        }
+        @if (TempData["CommentAdded"] != null && (bool)TempData["CommentAdded"])
+        {
+            <text>
+                toastr.success('Comment Added successfully!');
+            </text>
+        }
+        });
+    </script>
